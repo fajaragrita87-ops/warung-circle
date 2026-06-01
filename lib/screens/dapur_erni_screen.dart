@@ -526,6 +526,96 @@ class _DapurErniScreenState extends State<DapurErniScreen> {
     );
   }
 
+  void _showPaymentOption(Map<String, dynamic> pkg) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: WC.bg,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Text(
+          'Konfirmasi Top Up 💳',
+          style: GoogleFonts.poppins(
+            fontWeight: FontWeight.w900,
+            fontSize: 18,
+            color: WC.primary,
+          ),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Paket: ${pkg['name']}',
+              style: GoogleFonts.poppins(
+                fontWeight: FontWeight.w700,
+                fontSize: 14,
+                color: WC.textDark,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              '${pkg['kopi']} Kopi ${pkg['respect'] > 0 ? '+ ${pkg['respect']} Respect 🫡' : ''}',
+              style: GoogleFonts.nunito(
+                fontSize: 13,
+                color: WC.textMid,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              'Harga: ${pkg['price']}',
+              style: GoogleFonts.poppins(
+                fontWeight: FontWeight.w700,
+                fontSize: 14,
+                color: WC.accent,
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(
+              'Batal',
+              style: GoogleFonts.poppins(color: WC.textMid),
+            ),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: WC.primary,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            ),
+            onPressed: () {
+              Navigator.pop(ctx);
+              setState(() {
+                _kopiBalance += pkg['kopi'] as int;
+                _respectPoints = (_respectPoints + (pkg['respect'] as int)).toDouble();
+                _transactions.insert(0, {
+                  'type': 'in',
+                  'label': '${pkg['name']} Top Up',
+                  'amount': pkg['kopi'].toDouble(),
+                  'time': 'Baru saja'
+                });
+              });
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  backgroundColor: WC.success,
+                  content: Text(
+                    '✅ Top Up berhasil! Sekarang punya ${_kopiBalance.toInt()} Kopi Bestie ☕',
+                    style: GoogleFonts.poppins(color: Colors.white),
+                  ),
+                ),
+              );
+            },
+            child: Text(
+              'Lanjutkan',
+              style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.w700),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   void _showTopUpSheet() {
     final List<Map<String, dynamic>> packages = [
       {'name': 'Ngopi Hemat', 'price': 'Rp 10.000', 'kopi': 15, 'respect': 0},
