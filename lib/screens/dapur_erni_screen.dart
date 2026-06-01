@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:warung_circle/theme/warung_colors.dart';
 import 'package:warung_circle/utils/constants.dart';
 import 'package:warung_circle/utils/warung_state.dart';
+import 'package:warung_circle/utils/file_picker_helper.dart';
 import 'package:warung_circle/widgets/bounce_mascot.dart';
 import 'package:warung_circle/widgets/fade_scale_in.dart';
 import 'package:warung_circle/widgets/kopi_button.dart';
@@ -50,7 +52,7 @@ class _DapurErniScreenState extends State<DapurErniScreen> {
   @override
   Widget build(BuildContext context) {
     return WarungShell(
-      title: '☕ Dapur Teh Erni',
+      title: WS.isLoggedIn ? '☕ Dapur ${WS.userName}' : '☕ Dapur Teh Erni',
       currentIndex: 4,
       showFab: false,
       body: ListView(
@@ -153,17 +155,64 @@ class _DapurErniScreenState extends State<DapurErniScreen> {
       ),
       child: Row(
         children: [
-          // Avatar
-          Container(
-            width: 72,
-            height: 72,
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.25),
-              shape: BoxShape.circle,
-              border: Border.all(color: Colors.white, width: 3),
-            ),
-            child: const Center(
-              child: Text('😊', style: TextStyle(fontSize: 36)),
+          // Interactive Avatar with Pick Photo functionality
+          GestureDetector(
+            onTap: () async {
+              try {
+                final bytes = await FilePickerHelper.pickImage();
+                if (bytes != null) {
+                  final base64Image = base64Encode(bytes);
+                  setState(() {
+                    WS.userAvatar = base64Image;
+                  });
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          'Foto profil berhasil diperbarui! 📸✨',
+                          style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                        backgroundColor: WC.success,
+                      ),
+                    );
+                  }
+                }
+              } catch (e) {
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'Gagal mengambil foto: $e',
+                        style: GoogleFonts.poppins(color: Colors.white),
+                      ),
+                      backgroundColor: WC.primary,
+                    ),
+                  );
+                }
+              }
+            },
+            child: Container(
+              width: 72,
+              height: 72,
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.25),
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.white, width: 3),
+                image: WS.userAvatar.isNotEmpty
+                    ? DecorationImage(
+                        image: MemoryImage(base64Decode(WS.userAvatar)),
+                        fit: BoxFit.cover,
+                      )
+                    : null,
+              ),
+              child: WS.userAvatar.isEmpty
+                  ? const Center(
+                      child: Tooltip(
+                        message: 'Ketuk untuk ganti foto',
+                        child: Text('😊', style: TextStyle(fontSize: 36)),
+                      ),
+                    )
+                  : null,
             ),
           ),
 
@@ -1239,6 +1288,50 @@ class _DapurErniScreenState extends State<DapurErniScreen> {
             ),
 
             const SizedBox(height: 20),
+            Divider(color: Colors.white.withOpacity(0.1)),
+            const SizedBox(height: 16),
+
+            // Navigation to Full Admin Panel Screen
+            ScaleButton(
+              onTap: () => Navigator.pushNamed(context, Routes.adminPanel),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFFD500F9), Color(0xFF8E24AA)],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFFD500F9).withOpacity(0.4),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.dashboard_customize_rounded, color: Colors.white, size: 20),
+                    const SizedBox(width: 8),
+                    Text(
+                      'BUKA ADMIN PANEL UTAMA 🚀',
+                      style: GoogleFonts.poppins(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.white,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 24),
             Divider(color: Colors.white.withOpacity(0.1)),
             const SizedBox(height: 16),
 

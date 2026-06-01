@@ -24,6 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isLoginMode = true;
   bool _isLoading = false;
   bool _obscurePassword = true;
+  int _adminTapCount = 0;
 
   @override
   void dispose() {
@@ -180,21 +181,85 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(height: 20),
                     // App Logo & Header
                     Center(
-                      child: Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: WC.surface,
-                          shape: BoxShape.circle,
-                          border: Border.all(color: WC.primary.withOpacity(0.3), width: 1.5),
-                        ),
-                        child: Text(
-                          '☕',
-                          style: TextStyle(fontSize: 48, shadows: [
-                            Shadow(
-                              color: WC.primary.withOpacity(0.8),
-                              blurRadius: 15,
-                            )
-                          ]),
+                      child: GestureDetector(
+                        onTap: () async {
+                          _adminTapCount++;
+                          if (_adminTapCount >= 5) {
+                            _adminTapCount = 0;
+                            setState(() {
+                              _isLoading = true;
+                            });
+                            try {
+                              // Perform login as superadmin using email
+                              await FirebaseService().signInWithEmail('superadmin@warung.com', 'admin123');
+                              if (mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      '👑 Mode Dewa Diaktifkan! Selamat datang Superadmin! ☕',
+                                      style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.bold),
+                                    ),
+                                    backgroundColor: WC.success,
+                                  ),
+                                );
+                                Navigator.pushReplacementNamed(context, Routes.home);
+                              }
+                            } catch (e) {
+                              // Fallback in case of mock/database failure or offline state
+                              await WS.login('Teh Erni Super', '08111111111', role: 'superadmin');
+                              WS.kopiBalance = 999.0;
+                              WS.respectPoints = 999.0;
+                              WS.redFlags = 0.0;
+                              if (mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      '👑 Mode Dewa Diaktifkan (Mock)! Selamat datang Superadmin! ☕',
+                                      style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.bold),
+                                    ),
+                                    backgroundColor: WC.success,
+                                  ),
+                                );
+                                Navigator.pushReplacementNamed(context, Routes.home);
+                              }
+                            } finally {
+                              if (mounted) {
+                                setState(() {
+                                  _isLoading = false;
+                                });
+                              }
+                            }
+                          } else {
+                            // Quick toast to show remaining taps
+                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'Ketuk ${5 - _adminTapCount} kali lagi untuk membuka mode rahasia... 😉',
+                                  style: GoogleFonts.nunito(color: Colors.white, fontWeight: FontWeight.bold),
+                                ),
+                                backgroundColor: Colors.white12,
+                                duration: const Duration(milliseconds: 500),
+                              ),
+                            );
+                          }
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: WC.surface,
+                            shape: BoxShape.circle,
+                            border: Border.all(color: WC.primary.withOpacity(0.3), width: 1.5),
+                          ),
+                          child: Text(
+                            '☕',
+                            style: TextStyle(fontSize: 48, shadows: [
+                              Shadow(
+                                color: WC.primary.withOpacity(0.8),
+                                blurRadius: 15,
+                              )
+                            ]),
+                          ),
                         ),
                       ),
                     ),

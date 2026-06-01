@@ -18,6 +18,13 @@ class WS {
   static String get userContact => _userContact;
   static set userContact(String val) => _userContact = val;
 
+  static String _userAvatar = '';
+  static String get userAvatar => _userAvatar;
+  static set userAvatar(String val) {
+    _userAvatar = val;
+    persistStats();
+  }
+
   static String _userRole = 'user';
   static String get userRole => _userRole;
   static set userRole(String val) {
@@ -100,6 +107,7 @@ class WS {
       _userName = prefs.getString('userName') ?? '';
       _userContact = prefs.getString('userContact') ?? '';
       _userRole = prefs.getString('userRole') ?? 'user';
+      _userAvatar = prefs.getString('userAvatar') ?? '';
       _kopiBalance = prefs.getDouble('kopiBalance') ?? 15.0;
       _kopiDebt = prefs.getDouble('kopiDebt') ?? 0.0;
       _respectPoints = prefs.getDouble('respectPoints') ?? 75.0;
@@ -122,6 +130,7 @@ class WS {
       await prefs.setString('userName', name);
       await prefs.setString('userContact', contact);
       await prefs.setString('userRole', role);
+      await prefs.setString('userAvatar', '');
       await prefs.setDouble('kopiBalance', kopiBalance);
     } catch (e) {
       debugPrint('Error saving login session: $e');
@@ -136,6 +145,7 @@ class WS {
       await prefs.setDouble('respectPoints', respectPoints);
       await prefs.setDouble('redFlags', redFlags);
       await prefs.setString('userRole', userRole);
+      await prefs.setString('userAvatar', userAvatar);
       await prefs.setStringList('gachaInventory', gachaInventory);
     } catch (e) {
       debugPrint('Error persisting stats: $e');
@@ -151,6 +161,7 @@ class WS {
     respectPoints = 75.0;
     redFlags = 10.0;
     _userRole = 'user';
+    _userAvatar = '';
     gachaInventory.clear();
 
     try {
