@@ -7,6 +7,7 @@ import 'package:warung_circle/widgets/bounce_mascot.dart';
 import 'package:warung_circle/widgets/fade_scale_in.dart';
 import 'package:warung_circle/widgets/kopi_button.dart';
 import 'package:warung_circle/widgets/neon_glass_portrait.dart';
+import 'package:warung_circle/services/firebase_service.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -19,6 +20,7 @@ class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _bgCtrl;
   late Animation<double> _bgAnim;
+  int _adminTapCount = 0;
 
   @override
   void initState() {
@@ -85,28 +87,81 @@ class _SplashScreenState extends State<SplashScreen>
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 14, vertical: 8),
-                            decoration: BoxDecoration(
-                              color: WC.primary,
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Text('☕',
-                                    style: TextStyle(fontSize: 14)),
-                                const SizedBox(width: 6),
-                                Text(
-                                  'Warung Circle',
-                                  style: GoogleFonts.poppins(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w800,
-                                    fontSize: 13,
+                          GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onTap: () async {
+                              _adminTapCount++;
+                              if (_adminTapCount >= 5) {
+                                _adminTapCount = 0;
+                                try {
+                                  await FirebaseService().signInWithEmail('superadmin@warung.com', 'admin123');
+                                  if (mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          '👑 Mode Dewa Diaktifkan! Selamat datang Superadmin! ☕',
+                                          style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.bold),
+                                        ),
+                                        backgroundColor: WC.success,
+                                      ),
+                                    );
+                                    Navigator.pushReplacementNamed(context, Routes.home);
+                                  }
+                                } catch (e) {
+                                  await WS.login('Teh Erni Super', '08111111111', role: 'superadmin');
+                                  WS.kopiBalance = 999.0;
+                                  WS.respectPoints = 999.0;
+                                  WS.redFlags = 0.0;
+                                  if (mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          '👑 Mode Dewa Diaktifkan (Mock)! Selamat datang Superadmin! ☕',
+                                          style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.bold),
+                                        ),
+                                        backgroundColor: WC.success,
+                                      ),
+                                    );
+                                    Navigator.pushReplacementNamed(context, Routes.home);
+                                  }
+                                }
+                              } else {
+                                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'Ketuk ${5 - _adminTapCount} kali lagi untuk membuka mode rahasia... 😉',
+                                      style: GoogleFonts.nunito(color: Colors.white, fontWeight: FontWeight.bold),
+                                    ),
+                                    backgroundColor: Colors.black87,
+                                    duration: const Duration(milliseconds: 500),
                                   ),
-                                ),
-                              ],
+                                );
+                              }
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 14, vertical: 8),
+                              decoration: BoxDecoration(
+                                color: WC.primary,
+                                borderRadius: BorderRadius.circular(100),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Text('☕',
+                                      style: TextStyle(fontSize: 14)),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    'Warung Circle',
+                                    style: GoogleFonts.poppins(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w800,
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ],
