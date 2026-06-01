@@ -2,9 +2,9 @@ name: Build Warung Circle APK
 
 on:
   push:
-    branches: [main, master]
+    branches: [main, master, agents/desain-sesuai-permintaan]
   pull_request:
-    branches: [main, master]
+    branches: [main, master, agents/desain-sesuai-permintaan]
   workflow_dispatch:  # allow manual trigger
 
 jobs:
