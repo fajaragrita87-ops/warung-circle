@@ -77,8 +77,9 @@ class _SplashScreenState extends State<SplashScreen>
             SafeArea(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 28),
-                child: Column(
-                  children: [
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
                     const SizedBox(height: 40),
 
                     // Logo badge
@@ -253,6 +254,7 @@ class _SplashScreenState extends State<SplashScreen>
 
                     const SizedBox(height: 32),
                   ],
+                ),
                 ),
               ),
             ),
