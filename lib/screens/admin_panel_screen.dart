@@ -75,6 +75,29 @@ class _AdminPanelScreenState extends State<AdminPanelScreen>
   void initState() {
     super.initState();
     _tabCtrl = TabController(length: 4, vsync: this);
+
+    // Auto-fill and search target user from URL query parameters (Superadmin WA Deep Link)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final uri = Uri.base;
+      if (uri.queryParameters.containsKey('target')) {
+        final target = uri.queryParameters['target'] ?? '';
+        if (target.isNotEmpty) {
+          setState(() {
+            _userSearch = target;
+            _searchCtrl.text = target;
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: _accent,
+              content: Text(
+                '🔍 Pintasan deteksi warga: $target. Silakan klik +Kopi untuk mengisi! ☕',
+                style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+            ),
+          );
+        }
+      }
+    });
   }
 
   @override

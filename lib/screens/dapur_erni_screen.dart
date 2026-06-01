@@ -5,6 +5,7 @@ import 'package:warung_circle/theme/warung_colors.dart';
 import 'package:warung_circle/utils/constants.dart';
 import 'package:warung_circle/utils/warung_state.dart';
 import 'package:warung_circle/utils/file_picker_helper.dart';
+import 'package:warung_circle/utils/url_launcher_helper.dart';
 import 'package:warung_circle/widgets/bounce_mascot.dart';
 import 'package:warung_circle/widgets/fade_scale_in.dart';
 import 'package:warung_circle/widgets/kopi_button.dart';
@@ -616,36 +617,7 @@ class _DapurErniScreenState extends State<DapurErniScreen> {
                           label: pkg['price'] as String,
                           onPressed: () {
                             Navigator.pop(ctx);
-                            double addedKopi = (pkg['kopi'] as int).toDouble();
-                            double addedRespect = (pkg['respect'] as int).toDouble();
-                            setState(() {
-                              if (_kopiDebt > 0) {
-                                double repayment = _kopiDebt;
-                                _kopiDebt = 0;
-                                _kopiBalance += (addedKopi - repayment);
-                                _transactions.insert(0, {
-                                  'type': 'in',
-                                  'label': 'Top Up ${pkg['name']} (Potong Kasbon)',
-                                  'amount': addedKopi - repayment,
-                                  'time': 'Baru saja'
-                                });
-                              } else {
-                                _kopiBalance += addedKopi;
-                                _transactions.insert(0, {
-                                  'type': 'in',
-                                  'label': 'Top Up ${pkg['name']}',
-                                  'amount': addedKopi,
-                                  'time': 'Baru saja'
-                                });
-                              }
-                              _respectPoints += addedRespect;
-                            });
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                backgroundColor: WC.success,
-                                content: Text('Top Up sukses! +$addedKopi Kopi masuk kantong ☕✨'),
-                              ),
-                            );
+                            _showPaymentOption(pkg);
                           },
                           fullWidth: false,
                           height: 32,
