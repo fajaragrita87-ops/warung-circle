@@ -32,7 +32,7 @@ class NeonIcon extends StatelessWidget {
       child: Center(
         child: Text(
           label.substring(0, 1),
-          style: TextStyle(
+          style: const TextStyle(
               color: Colors.white, fontWeight: FontWeight.w700, fontSize: 24),
         ),
       ),

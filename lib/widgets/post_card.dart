@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:warung_circle/theme/warung_colors.dart';
+import 'package:warung_circle/widgets/cute_card.dart';
 
 class PostCard extends StatelessWidget {
   final String title;
@@ -17,25 +18,10 @@ class PostCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return Container(
       margin: const EdgeInsets.only(bottom: 18),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [WarungColors.card, Colors.white],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(24),
-          boxShadow: [
-            BoxShadow(
-              color: WarungColors.primary.withAlpha(31),
-              blurRadius: 18,
-              offset: const Offset(0, 12),
-            ),
-          ],
-        ),
+      child: CuteCard(
+        borderRadius: 28,
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,35 +30,51 @@ class PostCard extends StatelessWidget {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    color: WarungColors.secondary.withAlpha(36),
-                    borderRadius: BorderRadius.circular(16),
+                    color: WarungColors.primaryLight,
+                    borderRadius: BorderRadius.circular(14),
                   ),
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   child: Text(tag,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w700,
-                          color: WarungColors.secondary)),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w800,
+                          color: WarungColors.primary)),
                 ),
                 const Spacer(),
-                const Icon(Icons.rocket_launch, color: WarungColors.primary),
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: WarungColors.bg,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(Icons.rocket_launch,
+                      color: WarungColors.primary),
+                ),
               ],
             ),
-            const SizedBox(height: 16),
-            Text(title, style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 18),
+            Text(title,
+                style: Theme.of(context)
+                    .textTheme
+                    .titleLarge
+                    ?.copyWith(fontWeight: FontWeight.w800)),
             const SizedBox(height: 10),
-            Text(subtitle, style: Theme.of(context).textTheme.bodyMedium),
-            const SizedBox(height: 16),
+            Text(subtitle,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium
+                    ?.copyWith(color: WarungColors.textSecondary)),
+            const SizedBox(height: 18),
             Row(
               children: [
-                const Icon(Icons.favorite,
-                    color: WarungColors.accent, size: 20),
+                Icon(Icons.favorite, color: WarungColors.danger, size: 20),
                 const SizedBox(width: 8),
                 Text('$reactionCount',
                     style: Theme.of(context).textTheme.bodyMedium),
                 const Spacer(),
-                const Icon(Icons.comment,
-                    color: WarungColors.textPrimary, size: 20),
+                Icon(Icons.comment,
+                    color: WarungColors.textSecondary, size: 20),
                 const SizedBox(width: 6),
                 Text('Reply', style: Theme.of(context).textTheme.bodyMedium),
               ],

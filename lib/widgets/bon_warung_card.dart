@@ -44,7 +44,7 @@ class BonWarungCard extends StatelessWidget {
               ],
             ),
           ),
-          Text('Beli',
+          const Text('Beli',
               style: TextStyle(
                   color: WarungColors.primary, fontWeight: FontWeight.w700)),
         ],

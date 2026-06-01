@@ -1,5 +1,5 @@
 name: warung_circle
-description: A warm community app for Warung Circle following the PRD.
+description: Warung Circle — Kampung Digital Gen Z, warm community app.
 publish_to: none
 version: 0.1.0+1
 environment:
@@ -9,10 +9,20 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.5
-  http: ^0.13.6
+  http: ^1.2.0
+  google_fonts: ^6.1.0
+  shared_preferences: ^2.2.0
+  firebase_core: ^4.9.0
+  firebase_auth: ^6.5.1
+  cloud_firestore: ^6.4.1
+  firebase_storage: ^13.4.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
 flutter:
   uses-material-design: true
+  assets:
+    - assets/images/teh_erni_transparent.png
+    - assets/images/mascot_group.png
+    - assets/images/splash_bg.png

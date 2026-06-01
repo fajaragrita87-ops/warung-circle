@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warung Circle - Social Feed</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Kiri */
+        .sidebar-left {
+            width: 280px;
+            background: white;
+            padding: 20px;
+            border-right: 1px solid #eee;
+            overflow-y: auto;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+        }
+
+        .profile-section {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            position: relative;
+        }
+
+        .profile-avatar-small {
+            position: absolute;
+            bottom: -5px;
+            right: -5px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .profile-name {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .profile-handle {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .menu-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-radius: 8px;
+            transition: background 0.2s;
+            font-size: 14px;
+        }
+
+        .menu-item:hover {
+            background: #f5f5f5;
+        }
+
+        .menu-item.active {
+            background: #f5f5f5;
+            font-weight: 600;
+        }
+
+        .menu-item span:first-child {
+            width: 20px;
+        }
+
+        .badge {
+            margin-left: auto;
+            background: #ff3b30;
+            color: white;
+            border-radius: 10px;
+            padding: 2px 6px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .download-app {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            color: white;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .download-app:hover {
+            transform: scale(1.02);
+        }
+
+        .download-app-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .download-app-text {
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        /* Konten Utama */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .feed-header {
+            background: white;
+            padding: 24px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .feed-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .feed-tabs {
+            display: flex;
+            gap: 24px;
+        }
+
+        .feed-tab {
+            cursor: pointer;
+            padding-bottom: 8px;
+            border-bottom: 2px solid transparent;
+            font-size: 13px;
+            color: #888;
+            transition: all 0.2s;
+        }
+
+        .feed-tab.active {
+            color: black;
+            border-bottom-color: black;
+            font-weight: 600;
+        }
+
+        .feed-body {
+            padding: 20px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        /* Post Card */
+        .post {
+            background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .post.light {
+            background: linear-gradient(135deg, #fff8e1 0%, #ffe0b2 100%);
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            gap: 12px;
+        }
+
+        .post-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #ddd;
+            flex-shrink: 0;
+        }
+
+        .post-meta {
+            flex: 1;
+        }
+
+        .post-author {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .post-time {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .post-menu {
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .post-content {
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .post-images {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .post-image {
+            height: 150px;
+            background: #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .post-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .post-image.large {
+            grid-column: span 2;
+            height: 200px;
+        }
+
+        .post-reactions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            font-size: 14px;
+        }
+
+        .emoji {
+            font-size: 16px;
+        }
+
+        .reaction-count {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .spacer {
+            margin-left: auto;
+        }
+
+        .post-actions {
+            display: flex;
+            justify-content: space-around;
+            gap: 8px;
+        }
+
+        .post-action {
+            flex: 1;
+            padding: 8px 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #666;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .post-action:hover {
+            background: rgba(0,0,0,0.05);
+        }
+
+        /* Share Widget */
+        .share-widget {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .share-header {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .share-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #ddd;
+            flex-shrink: 0;
+        }
+
+        .share-input {
+            flex: 1;
+            background: #f5f5f5;
+            border: none;
+            border-radius: 20px;
+            padding: 12px 16px;
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        .share-input::placeholder {
+            color: #888;
+        }
+
+        .share-close {
+            cursor: pointer;
+            font-size: 20px;
+            color: #888;
+        }
+
+        .share-footer {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-top: 12px;
+        }
+
+        .share-option {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            color: #666;
+            cursor: pointer;
+        }
+
+        .share-option:hover {
+            color: #333;
+        }
+
+        .share-button {
+            margin-left: auto;
+            background: black;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 24px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .share-button:hover {
+            background: #333;
+        }
+
+        /* Sidebar Kanan */
+        .sidebar-right {
+            width: 300px;
+            background: white;
+            padding: 16px;
+            border-left: 1px solid #eee;
+            overflow-y: auto;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .stories {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .story {
+            height: 120px;
+            background: #ddd;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .story:hover {
+            transform: scale(1.02);
+        }
+
+        .story-authors {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .story-author {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 8px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .story-author-avatar {
+            width: 60px;
+            height: 60px;
+            background: #ddd;
+            border-radius: 6px;
+            margin: 0 auto 6px;
+        }
+
+        .story-author-name {
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .suggestion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .see-all {
+            font-size: 11px;
+            color: #0066cc;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .suggestion-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .suggestion-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #ddd;
+            flex-shrink: 0;
+        }
+
+        .suggestion-info {
+            flex: 1;
+        }
+
+        .suggestion-name {
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .follow-button {
+            background: black;
+            color: white;
+            border: none;
+            border-radius: 16px;
+            padding: 6px 16px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .follow-button:hover {
+            background: #333;
+        }
+
+        .recommendations {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .recommendation-card {
+            height: 100px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .recommendation-card:hover {
+            transform: scale(1.05);
+        }
+
+        .recommendation-card.ui {
+            background: linear-gradient(135deg, #bbdefb 0%, #81c784 100%);
+        }
+
+        .recommendation-card.music {
+            background: linear-gradient(135deg, #f48fb1 0%, #ff80ab 100%);
+        }
+
+        .recommendation-card.cooking {
+            background: linear-gradient(135deg, #ffcc80 0%, #ffb74d 100%);
+        }
+
+        .recommendation-card.hiking {
+            background: linear-gradient(135deg, #ce93d8 0%, #ba68c8 100%);
+        }
+
+        .recommendation-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .sidebar-right {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar-left {
+                display: none;
+            }
+            .feed-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            .feed-tabs {
+                width: 100%;
+                overflow-x: auto;
+            }
+        }
+
+        .divider {
+            height: 1px;
+            background: #eee;
+            margin: 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Kiri -->
+        <div class="sidebar-left">
+            <div class="profile-section">
+                <div class="profile-avatar">
+                    👤
+                    <div class="profile-avatar-small">👨</div>
+                </div>
+                <div class="profile-name">Bogdan Nikitin</div>
+                <div class="profile-handle">@nikitinteam</div>
+            </div>
+
+            <div class="menu-item active">
+                <span>📰</span>
+                <span>News Feed</span>
+            </div>
+            <div class="menu-item">
+                <span>✉️</span>
+                <span>Messages</span>
+                <span class="badge">1</span>
+            </div>
+            <div class="menu-item">
+                <span>💬</span>
+                <span>Forums</span>
+            </div>
+            <div class="menu-item">
+                <span>👥</span>
+                <span>Friends</span>
+                <span class="badge">2</span>
+            </div>
+            <div class="menu-item">
+                <span>📷</span>
+                <span>Media</span>
+            </div>
+            <div class="menu-item">
+                <span>⚙️</span>
+                <span>Settings</span>
+            </div>
+
+            <div class="download-app">
+                <div class="download-app-icon">📱</div>
+                <div class="download-app-text">Download the App</div>
+            </div>
+        </div>
+
+        <!-- Konten Utama -->
+        <div class="main-content">
+            <!-- Feed Header -->
+            <div class="feed-header">
+                <div class="feed-title">Feeds</div>
+                <div class="feed-tabs">
+                    <div class="feed-tab active">Recents</div>
+                    <div class="feed-tab">Friends</div>
+                    <div class="feed-tab">Popular</div>
+                </div>
+            </div>
+
+            <!-- Feed Body -->
+            <div class="feed-body">
+                <!-- Post 1 -->
+                <div class="post">
+                    <div class="post-header">
+                        <div class="post-avatar"></div>
+                        <div class="post-meta">
+                            <div class="post-author">George Lobko</div>
+                            <div class="post-time">2 hours ago</div>
+                        </div>
+                        <div class="post-menu">⋮</div>
+                    </div>
+
+                    <div class="post-content">
+                        Hi everyone, today I was on the most beautiful mountain in the world 😍. I also want to say hi to 👋 Silena, 💥 Oliva and 😇 Davis!
+                    </div>
+
+                    <div class="post-images">
+                        <div class="post-image"><div style="background: linear-gradient(135deg, #667eea, #764ba2); height: 100%;"></div></div>
+                        <div class="post-image"><div style="background: linear-gradient(135deg, #f093fb, #f5576c); height: 100%;"></div></div>
+                        <div class="post-image large"><div style="background: linear-gradient(135deg, #4facfe, #00f2fe); height: 100%;"></div></div>
+                    </div>
+
+                    <div class="post-reactions">
+                        <span class="emoji">😊</span>
+                        <span class="emoji">❤️</span>
+                        <span class="emoji">👍</span>
+                        <span class="emoji">🔥</span>
+                        <span class="emoji">😍</span>
+                        <span class="reaction-count">635</span>
+                        <span class="spacer"></span>
+                        <span class="reaction-count">15 comments</span>
+                    </div>
+
+                    <div class="post-actions">
+                        <div class="post-action">👍 Like</div>
+                        <div class="post-action">💬 Comment</div>
+                        <div class="post-action">↗️ Share</div>
+                    </div>
+                </div>
+
+                <!-- Post 2 -->
+                <div class="post light">
+                    <div class="post-header">
+                        <div class="post-avatar"></div>
+                        <div class="post-meta">
+                            <div class="post-author">Vitaliy Boyko</div>
+                            <div class="post-time">4 hours ago</div>
+                        </div>
+                        <div class="post-menu">⋮</div>
+                    </div>
+
+                    <div class="post-content">
+                        I chose a wonderful coffee today, I wanted to tell you what product they have in stock - it's a latte with coconut 🥥 milk... delicious... it's really incredibly tasty!!! 😋
+                    </div>
+
+                    <div class="post-reactions">
+                        <span class="emoji">❤️</span>
+                        <span class="emoji">😋</span>
+                        <span class="reaction-count">315</span>
+                        <span class="spacer"></span>
+                        <span class="reaction-count">8 comments</span>
+                    </div>
+
+                    <div class="post-actions">
+                        <div class="post-action">👍 Like</div>
+                        <div class="post-action">💬 Comment</div>
+                        <div class="post-action">↗️ Share</div>
+                    </div>
+                </div>
+
+                <!-- Share Widget -->
+                <div class="share-widget">
+                    <div class="share-header">
+                        <div class="share-avatar"></div>
+                        <input type="text" class="share-input" placeholder="Share something">
+                        <div class="share-close">✕</div>
+                    </div>
+
+                    <div class="share-footer">
+                        <div class="share-option">📄 File</div>
+                        <div class="share-option">🖼️ Image</div>
+                        <div class="share-option">📍 Location</div>
+                        <div class="share-option">🌍 Public</div>
+                        <button class="share-button">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar Kanan -->
+        <div class="sidebar-right">
+            <!-- Stories -->
+            <div class="section-title">Stories</div>
+            <div class="stories">
+                <div class="story" style="background: linear-gradient(135deg, #667eea, #764ba2);"></div>
+                <div class="story" style="background: linear-gradient(135deg, #f093fb, #f5576c);"></div>
+            </div>
+
+            <!-- Story Authors -->
+            <div class="story-authors">
+                <div class="story-author">
+                    <div class="story-author-avatar"></div>
+                    <div class="story-author-name">Anatoly Po</div>
+                </div>
+                <div class="story-author">
+                    <div class="story-author-avatar"></div>
+                    <div class="story-author-name">Leila Eanz</div>
+                </div>
+            </div>
+
+            <!-- Suggestions -->
+            <div class="suggestion-header">
+                <div class="section-title">Suggestions</div>
+                <a href="#" class="see-all">See all</a>
+            </div>
+
+            <div class="suggestion-card">
+                <div class="suggestion-avatar"></div>
+                <div class="suggestion-info">
+                    <div class="suggestion-name">Nick Shelburne</div>
+                </div>
+                <button class="follow-button">Follow</button>
+            </div>
+
+            <div class="suggestion-card">
+                <div class="suggestion-avatar"></div>
+                <div class="suggestion-info">
+                    <div class="suggestion-name">Brittni Lando</div>
+                </div>
+                <button class="follow-button">Follow</button>
+            </div>
+
+            <div class="suggestion-card">
+                <div class="suggestion-avatar"></div>
+                <div class="suggestion-info">
+                    <div class="suggestion-name">Ivan Shevchenko</div>
+                </div>
+                <button class="follow-button">Follow</button>
+            </div>
+
+            <div style="margin: 24px 0;"></div>
+
+            <!-- Recommendations -->
+            <div class="section-title">Recommendations</div>
+            <div class="recommendations">
+                <div class="recommendation-card ui">
+                    <div class="recommendation-icon">🎨</div>
+                    <div>UI/UX</div>
+                </div>
+                <div class="recommendation-card music">
+                    <div class="recommendation-icon">🎵</div>
+                    <div>Music</div>
+                </div>
+                <div class="recommendation-card cooking">
+                    <div class="recommendation-icon">🍳</div>
+                    <div>Cooking</div>
+                </div>
+                <div class="recommendation-card hiking">
+                    <div class="recommendation-icon">⛰️</div>
+                    <div>Hiking</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Interactive elements
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        document.querySelectorAll('.feed-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.feed-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        document.querySelectorAll('.post-action').forEach(action => {
+            action.addEventListener('click', function() {
+                alert('Action clicked: ' + this.textContent);
+            });
+        });
+
+        document.querySelectorAll('.follow-button').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.textContent = this.textContent === 'Follow' ? 'Following' : 'Follow';
+                this.style.background = this.textContent === 'Following' ? '#667eea' : 'black';
+            });
+        });
+    </script>
+</body>
+</html>

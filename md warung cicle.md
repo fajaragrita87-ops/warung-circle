@@ -15,48 +15,18 @@
 
 ---
 
-## 🎨 SECTION 1: DESIGN SYSTEM (Wajib Dipatuhi)
+## 🎨 SECTION 1: DESIGN SYSTEM (sesuai permintaan)
 
 ### 1.1 COLOR PALETTE — "Warm Tongkrongan"
 
-| Nama Warna | Hex Code | Fungsi |
-|------------|----------|--------|
-| 🧱 Tembok Warung (Background Utama) | `#FFF8F0` | Background semua screen |
-| 🧡 Neon Warung (Primary) | `#FF6B35` | Tombol utama, aksen, highlight |
-| 🟡 Kuning Madu (Secondary) | `#FFB800` | Badge, star, harga |
-| 🟤 Kopi Susu (Teks Utama) | `#4A2C2A` | Teks body |
-| 🩷 Coral Hype (Accent) | `#FF8A80` | Like, love, notifikasi |
-| 🤍 Susu Kental (Card BG) | `#FFFAF0` | Background card |
-| 🟢 Daun Pisang (Success) | `#7CB342` | Berhasil, verified |
-| 🔴 Danger Red (Warning) | `#FF003C` | Error, pelanggaran |
-| 🔵 Electric Blue (Pak RT) | `#00B4D8` | Warna karakter Pak RT |
-| 🟣 Purple Neon (Kucing) | `#9B59B6` | Warna karakter Kucing |
-| 🟢 Wisdom Green (Ustad) | `#00E676` | Warna karakter Ustad |
-| 🟡 Gold Neon (Abang Lapak) | `#FFD700` | Warna karakter Abang Lapak |
 
-### 1.2 TYPOGRAPHY
 
-| Pemakaian | Font | Weight | Size |
-|-----------|------|--------|------|
-| Judul Besar | Poppins | Bold | 24-32px |
-| Sub Judul | Poppins | SemiBold | 18-20px |
-| Body Teks | Nunito | Regular | 14-16px |
-| Chat/Cerita | Comic Neue | Regular | 13-15px |
-| Harga/Angka | Space Grotesk | Medium | 16-18px |
+### 1.2 TYPOGRAPHY sesuai permintaan terakhir 
 
-### 1.3 UI COMPONENTS STYLE
 
-| Komponen | Style | Detail |
-|----------|-------|--------|
-| **Card** | Glassmorphism + Rounded 24px | BG: `#FFFAF0` + Blur, Border: 2px `#FF6B35` transparan, Shadow: warm orange glow `0 8px 32px rgba(255,107,53,0.15)` |
-| **Tombol Utama** | Pill Shape Rounded 100px | Gradient `#FF6B35` → `#FFB800`, Teks putih bold, Shadow warm orange |
-| **Badge/Tag** | Sticker Style Rounded 16px | Warna sesuai kategori, teks bold, kayak sticker IG |
-| **Bottom Navigation** | Floating Pill Shape | Position: 16px dari bawah, Rounded 30px, Active: gradient oranye + glow, Inactive: `#D4C5B5` |
-| **Icon Karakter** | Neon Glass Portrait | Lingkaran 36px, Glassmorphism + Neon Glow sesuai warna karakter + Pulse Animation |
-| **Input Field** | Rounded 16px + Border Oranye | BG: `#FFFAF0`, Border: 2px `#FF6B35`, Focus: glow oranye |
-| **Sticky Note (Feed)** | Kertas Minyak Style | Warna kuning/pink/hijau, shadow selotip di pojok, rounded 12px |
 
----
+### 1.3 UI COMPONENTS STYLE sesuai permintaan terakhir
+
 
 ## 🎭 SECTION 2: KARAKTER & FUNGSI (Wajib Dipatuhi)
 
@@ -74,7 +44,7 @@
 #### 🍵 TEH ERNI — Admin & Chatbot
 | Fitur | Detail |
 |-------|--------|
-| Onboarding | Nyapa user baru, tanya mood, kasih 50 Kopi gratis |
+| Onboarding | Nyapa user baru, tanya mood, kasih 15 Kopi gratis |
 | Chat Pribadi | User bisa chat kapan aja, Teh Erni jawab dengan gaya sassy |
 | Peringatan Kasbon | "Kopi lo tinggal 2, bro. Mau kasbon? Pak RT catet ya..." |
 | Traktir Reminder | "Bro, @Budi traktir lo 5 Kopi kemarin. Balas dong biar karma naik 🥹" |
@@ -131,7 +101,7 @@
 | 1 | Splash Screen | Logo Warung Circle (Neon Glow) + "Masuk Warung 🔥" |
 | 2 | Login | Pilih: Google / Firebase Auth / Guest (tanpa login, tapi fitur terbatas) |
 | 3 | Register | Nama, Tanggal Lahir, Pilih Mood (Santai/Serius/Emosional/Ambisius) |
-| 4 | Onboarding Teh Erni | Teh Erni nyapa → 4 pertanyaan singkat → Kasih 50 Kopi gratis + Badge "Anak Baru" |
+| 4 | Onboarding Teh Erni | Teh Erni nyapa → 4 pertanyaan singkat → Kasih 15 Kopi gratis + Badge "Anak Baru" |
 | 5 | Match 3 User | Sistem otomatis match 3 user yang cocok → Muncul di feed |
 | 6 | MASUK POSKO | ✅ Selesai Onboarding |
 
@@ -240,7 +210,7 @@ lib/
 | Barter Points | +10 tiap ngajar, -10 tiap belajar, +5 tiap rating 5 bintang |
 | Badge | 5 swap = "Sultan Skill", 10 swap = "Pak RT Skill" |
 
-### 5.3 📝 TITIP CERITA (Gila Text AI)
+### 5.3 📝 TITIP CERITA 
 
 | Fitur | Detail |
 |-------|--------|
@@ -348,19 +318,19 @@ lib/
 | No | Item | Status |
 |----|------|--------|
 | 1 | Nama App: Warung Circle | +
-| 2 | 5 Tab: Posko, Ruang Tengah, Titip Cerita, Open Circle, Dapur Erni | ⬜ |
+| 2 | 5 Tab: Posko, Ruang Tengah, Titip Cerita, Open Circle, Dapur Erni | + |
 | 3 | 6 Karakter: Teh Erni, Pak RT, Hansip, Ustad, Abang Lapak, Kucing Warung | +
-| 4 | Icon Style: Neon Glass Portrait (bukan emoji) | ⬜ |
+| 4 | Icon Style: Neon Glass Portrait (bukan emoji) | + |
 | 5 | Warna: Warm Cream + Orange (bukan dark mode) | +
 | 6 | Card Style: Sticky Note + Glassmorphism | +
 | 7 | Nav: Floating Pill Shape | +
 | 8 | Font: Poppins + Comic Neue | +
-| 9 | Sistem Kopi: Top Up + Kasbon + Traktir + Earn | ⬜ |
-| 10 | Moderasi: Pak RT + Hansip + Ustad + AI Filter | ⬜ |
+| 9 | Sistem Kopi: Top Up + Kasbon + Traktir + Earn | + |
+| 10 | Moderasi: Pak RT + Hansip + Ustad + AI Filter | + |
 | 11 | Fitur Lapak: Buka + Sewa Meja + Komisi 15% | +
 | 12 | Titip Cerita: AI Generate + Share Card | +
-| 13 | Onboarding: Teh Erni + 50 Kopi + Match 3 User | +
-| 14 | Logout: Konfirmasi Teh Erni | ⬜ |
+| 13 | Onboarding: Teh Erni + 15 Kopi + Match 3 User | +
+| 14 | Logout: Konfirmasi Teh Erni | + |
 
 ---
 
@@ -369,10 +339,11 @@ lib/
 > Tolong buatkan aplikasi Flutter bernama **"WARUNG CIRCLE"** berdasarkan PRD di atas.
 >
 > **ATURAN KERAS**:
-> 1. Jangan ubah nama fitur, karakter, warna, atau struktur yang ada di PRD ini.
+> 1. Jangan ubah nama fitur, karakter, , atau struktur yang ada di PRD ini.
 > 2. Icon karakter WAJIB pakai style "Neon Glass Portrait" — BUKAN emoji.
 > 3. Warna WAJIB warm cream + orange — BUKAN dark mode.
 > 4. Semua fitur di PRD WAJIB ada — jangan skip.
 > 5. Mulai dari: `warung_colors.dart` → `warung_theme.dart` → `main.dart` → Screen per screen.
->
+> 6. setiap reload tidak boleh lebih dari 2 detik 
+7. setiap habis pengerjaan wajib langsung buka alamat web 
 > **Mulai sekarang. Gas. 🔥**

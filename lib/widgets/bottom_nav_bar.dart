@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:warung_circle/theme/warung_colors.dart';
+import 'package:warung_circle/utils/constants.dart';
+import 'package:warung_circle/widgets/scale_button.dart';
 
+// ============================================================
+// BOTTOM NAV BAR v2 — 4 Tab Clean Design
+// Posko | Pasar | Obrolan | Profil
+// ============================================================
 class BottomNavBar extends StatelessWidget {
   final int currentIndex;
   final ValueChanged<int> onTabSelected;
@@ -11,71 +18,103 @@ class BottomNavBar extends StatelessWidget {
     required this.onTabSelected,
   });
 
+  static const _items = [
+    {'icon': Icons.home_rounded, 'label': 'Posko', 'route': Routes.home},
+    {'icon': Icons.storefront_rounded, 'label': 'Pasar', 'route': Routes.lapak},
+    {'icon': Icons.chat_bubble_rounded, 'label': 'Obrolan', 'route': Routes.chat},
+    {'icon': Icons.person_rounded, 'label': 'Profil', 'route': Routes.dapurErni},
+  ];
+
   @override
   Widget build(BuildContext context) {
-    final items = [
-      _BottomNavItem(icon: Icons.home, label: 'Posko'),
-      _BottomNavItem(icon: Icons.chair, label: 'Ruang'),
-      _BottomNavItem(icon: Icons.book, label: 'Cerita'),
-      _BottomNavItem(icon: Icons.group, label: 'Circle'),
-      _BottomNavItem(icon: Icons.restaurant, label: 'Dapur'),
-    ];
-
     return Container(
-      margin: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+      margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       decoration: BoxDecoration(
-        color: WarungColors.card,
-        borderRadius: BorderRadius.circular(30),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(28),
         boxShadow: [
           BoxShadow(
-            color: WarungColors.primary.withAlpha(36),
+            color: Colors.black.withOpacity(0.08),
             blurRadius: 24,
-            offset: const Offset(0, 14),
+            offset: const Offset(0, 8),
+          ),
+          BoxShadow(
+            color: WC.primary.withOpacity(0.06),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: items.asMap().entries.map((entry) {
-          final index = entry.key;
-          final item = entry.value;
-          final selected = index == currentIndex;
-          return Expanded(
-            child: InkWell(
-              onTap: () => onTabSelected(index),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(item.icon,
-                        color: selected
-                            ? WarungColors.primary
-                            : WarungColors.neutral),
-                    const SizedBox(height: 6),
-                    Text(item.label,
-                        style: TextStyle(
-                          color: selected
-                              ? WarungColors.primary
-                              : WarungColors.neutral,
-                          fontSize: 12,
-                          fontWeight:
-                              selected ? FontWeight.w700 : FontWeight.w500,
-                        )),
-                  ],
-                ),
-              ),
-            ),
-          );
-        }).toList(),
+        children: List.generate(
+          _items.length,
+          (i) => _NavItem(
+            icon: _items[i]['icon'] as IconData,
+            label: _items[i]['label'] as String,
+            isActive: i == currentIndex,
+            onTap: () => onTabSelected(i),
+          ),
+        ),
       ),
     );
   }
 }
 
-class _BottomNavItem {
+class _NavItem extends StatelessWidget {
   final IconData icon;
   final String label;
+  final bool isActive;
+  final VoidCallback onTap;
 
-  const _BottomNavItem({required this.icon, required this.label});
+  const _NavItem({
+    required this.icon,
+    required this.label,
+    required this.isActive,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ScaleButton(
+      onTap: onTap,
+      child: SizedBox(
+        height: 52, // Minimum 44px tap target
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 220),
+          curve: Curves.easeOutBack,
+          padding: EdgeInsets.symmetric(
+            horizontal: isActive ? 18 : 14,
+            vertical: 8,
+          ),
+          decoration: BoxDecoration(
+            color: isActive ? WC.primary : Colors.transparent,
+            borderRadius: BorderRadius.circular(22),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                icon,
+                color: isActive ? Colors.white : WC.textLight,
+                size: 22,
+              ),
+              if (isActive) ...[
+                const SizedBox(width: 7),
+                Text(
+                  label,
+                  style: GoogleFonts.poppins(
+                    color: Colors.white,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
