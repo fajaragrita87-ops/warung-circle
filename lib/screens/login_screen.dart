@@ -182,6 +182,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     // App Logo & Header
                     Center(
                       child: GestureDetector(
+                        behavior: HitTestBehavior.opaque,
                         onTap: () async {
                           _adminTapCount++;
                           if (_adminTapCount >= 5) {
